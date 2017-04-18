@@ -1,0 +1,33 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+
+import model.workspace.Document;
+import model.workspace.GraphicSlot;
+import model.workspace.Page;
+import view.DocView;
+import view.GraphicSlotView;
+import view.PageView;
+import view.ProjectView;
+
+public class NewGraphicSlotAction implements ActionListener {
+	public GraphicSlot s;
+
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		Object p = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+		if (p instanceof Page) {
+			s = new GraphicSlot("New slot", (Page) p);
+			((Page) p).addGraphicSlot(s);
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+		}
+	}
+}

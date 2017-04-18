@@ -1,0 +1,152 @@
+package gui;
+
+import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Locale;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+
+import actions.AboutDialogAction;
+
+public class Menu extends JMenuBar {
+		private Object object;
+		JMenu mnuJezik;
+		JCheckBoxMenuItem mniSrpski;
+		JCheckBoxMenuItem mniEngleski;
+		JMenu mnuProjekat;
+		Menu() {
+		
+			
+		mnuProjekat=new JMenu( MyFrame.getInstance().getResourceBundle().getString("mnuProjekat"));
+		mnuProjekat.setMnemonic(KeyEvent.VK_P);
+		add(mnuProjekat);
+		
+
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getSaveProjectAction());
+		
+
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getOpenProjectAction());
+		
+		
+		object = MyFrame.getInstance().getResourceBundle().getString("mnuNoviProjekat");
+		MyFrame.getInstance().getActionManager().getNewProjectAction().putValue("NAME", object);
+		System.out.println(MyFrame.getInstance().getActionManager().getNewProjectAction().getValue("NAME"));
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getNewProjectAction());
+		System.out.println(MyFrame.getInstance().getActionManager().getNewProjectAction().getValue("NAME"));
+		
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getNewDocumentAction());
+		
+
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getNewPageAction());
+		
+		mnuProjekat.addSeparator();	
+		
+
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getNewGraphicSlotAction());
+		
+
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getNewTextSlotAction());
+		
+		mnuProjekat.addSeparator();	
+		
+
+		object = MyFrame.getInstance().getResourceBundle().getString("mnuBrisanje");
+		MyFrame.getInstance().getActionManager().getDeleteAction().putValue("NAME", object);
+		mnuProjekat.add(MyFrame.getInstance().getActionManager().getDeleteAction());
+//-----------------------------------------------------------------	
+		JMenu window=new JMenu("Window");
+		window.setMnemonic(KeyEvent.VK_W);	
+		add(window);
+		
+
+		window.add(MyFrame.getInstance().getActionManager().getCascadeAction());
+			
+
+
+		window.add(MyFrame.getInstance().getActionManager().getTileHorizontallyAction());
+		
+
+		window.add(MyFrame.getInstance().getActionManager().getTileVerticallyAction());
+				
+
+		window.add(MyFrame.getInstance().getActionManager().getMatrixProjectViewAction());
+		
+	
+
+		//////////////////////////lokalizacija
+		
+		
+		mnuJezik=new JMenu(MyFrame.getInstance().getResourceBundle().getString("mnuJezik"));
+		add(mnuJezik);
+	
+		mniSrpski=new JCheckBoxMenuItem(MyFrame.getInstance().getResourceBundle().getString("mniSrpski"));
+		mniSrpski.setSelected(true);
+		mniSrpski.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Locale.setDefault(new Locale("sr","RS"));
+				MyFrame.getInstance().changeLanguage();
+				
+				
+			}
+		});
+		mnuJezik.add(mniSrpski);
+		
+		
+		mniEngleski=new JCheckBoxMenuItem(MyFrame.getInstance().getResourceBundle().getString("mniEngleski"));
+		mniEngleski.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Locale.setDefault(new Locale("en","US"));
+				MyFrame.getInstance().changeLanguage();
+			}
+		});
+		mnuJezik.add(mniEngleski);
+		//////////////////////////////////////////////////////////////////////////
+		
+		ButtonGroup bg=new ButtonGroup();
+		bg.add(mniSrpski);
+		bg.add(mniEngleski);
+		
+	
+		JMenu help=new JMenu("Help");
+		help.setMnemonic(KeyEvent.VK_H);
+		add(help);
+	
+		JMenuItem aboutGeRuDoc=new JMenuItem("About GeRuDoc");	
+		aboutGeRuDoc.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,Event.CTRL_MASK));
+		aboutGeRuDoc.addActionListener(new AboutDialogAction());
+		help.add(aboutGeRuDoc);
+
+		}
+		public void initComponents(){
+			//komponente koje su stalno vidljive
+			mnuProjekat.setText(MyFrame.getInstance().getResourceBundle().getString("mnuProjekat"));
+			
+			//System.out.println(MyFrame.getInstance().getActionManager().getNewProjectAction().getValue("NAME"));
+			
+			//System.out.println(MyFrame.getInstance().getActionManager().getDeleteAction().getValue("NAME"));
+			
+			//MyFrame.getInstance().getActionManager().getDeleteAction().putValue("NAME",  MyFrame.getInstance().getResourceBundle().getString("mnuBrisanje"));
+
+			//MyFrame.getInstance().getActionManager().getDeleteAction().putValue("NAME", object);
+			//System.out.println(MyFrame.getInstance().getActionManager().getDeleteAction().getValue("NAME"));
+			
+			
+			mnuJezik.setText(MyFrame.getInstance().getResourceBundle().getString("mnuJezik"));
+			
+			//MyFrame.getInstance().getActionManager().getNewProjectAction().putValue("NAME", object);
+			
+			mniEngleski.setText(MyFrame.getInstance().getResourceBundle().getString("mniEngleski"));
+			mniSrpski.setText(MyFrame.getInstance().getResourceBundle().getString("mniSrpski"));
+		}
+}

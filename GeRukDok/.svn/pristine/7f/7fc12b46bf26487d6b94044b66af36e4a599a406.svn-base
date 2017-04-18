@@ -1,0 +1,42 @@
+package actions;
+
+import gui.MyFrame;
+import gui.WorkspaceTree;
+import gui.listeners.ProjectMouseListener;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
+import javax.swing.JTabbedPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
+
+import model.workspace.Project;
+import view.ProjectView;
+
+public class NewProjectAction implements ActionListener {
+
+public void actionPerformed(ActionEvent arg0) {
+		
+		Project p=new Project(" ");
+		WorkspaceTree tree = MyFrame.getInstance().getWorkspaceTree();
+		tree.addProject(p);
+
+		JTabbedPane tabbDoc = new JTabbedPane();
+		
+		ProjectView view=new ProjectView(p);
+		view.setProject(p);
+		//dodajem JTabbedPane koji ce u sebi sadrzati tabove koji predstavljaju dokumenta
+		view.add(tabbDoc);
+		((BasicInternalFrameUI)view.getUI()).getNorthPane().addMouseListener(new ProjectMouseListener());
+		
+		MyFrame.getInstance().getDesktop().add(view);
+
+		try {
+			view.setSelected(true);
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,62 @@
+package state;
+
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+
+import model.elements.SlotElement;
+import view.GraphicSlotView;
+import view.GraphicSlotView.Handle;
+
+
+public class SelectState extends State{
+	private GraphicSlotView med; 
+	
+	//indeks elementa koji je selektovan
+	private int elementInMotion = -1;
+	private Handle handleInMotion = null;
+	
+	private int mouseButton=0;
+	
+	public SelectState(GraphicSlotView md) {
+	med = md;
+	}
+	
+	
+	public void mousePressed(MouseEvent e) {
+
+		mouseButton=e.getButton();
+		Point position = e.getPoint();
+		//med.transformToUserSpace(position);
+		if (e.getButton()==MouseEvent.BUTTON1){
+			handleInMotion = med.getDeviceAndHandleForPoint(position);
+			if(handleInMotion == null){
+				if(!e.isControlDown()){
+					med.getGraphicSlot().getSelectionModel().removeAllFromSelectionList();
+					}				
+				/*elementInMotion = med.getGraphicSlot().getModel().getElementAtPosition(position);
+				
+				if(elementInMotion != -1){
+					//pogodjen je element, ukoliko je selektovan treba ga ukloniti iz liste,
+					//ako nije treba ga dodati u listu
+					SlotElement element=med.getGraphicSlot().getModel().getElementAt(elementInMotion);
+					
+					if (med.getGraphicSlot().getSelectionModel().isElementSelected(element)){
+						med.getGraphicSlot().getSelectionModel().removeFromSelectionList(element);
+					}else{
+						med.getGraphicSlot().getSelectionModel().addToSelectionList(element);
+					}	
+					
+				}else{
+					//nije pogodjen nijedan element
+					
+				}*/
+			}else{
+			}
+			
+		}
+		
+
+	}
+	
+		
+	}

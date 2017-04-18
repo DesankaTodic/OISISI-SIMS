@@ -1,0 +1,64 @@
+package model.workspace;
+
+import java.io.Serializable;
+import java.util.Enumeration;
+
+import javax.swing.JTextArea;
+import javax.swing.tree.TreeNode;
+
+public class TextSlot implements TreeNode,Serializable{
+	public String name;
+	private Page page;
+
+	public TextSlot(String slotName, Page page) {
+		name=slotName;
+		this.page = page;
+
+		
+	}
+	
+	public Page getPage()
+	{
+		return page;
+	}
+	
+	public String toString(){
+		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public TreeNode getChildAt(int arg0) {
+		return null;
+	}
+
+	public int getChildCount() {
+		return 0;
+	}
+
+	public TreeNode getParent() {
+		return null;
+	}
+
+	public int getIndex(TreeNode arg0) {
+		return -1;
+	}
+
+	public boolean getAllowsChildren() {
+		return false;
+	}
+
+	public boolean isLeaf() {
+		return true;
+	}
+
+	public Enumeration children() {
+		return null;
+	}
+}

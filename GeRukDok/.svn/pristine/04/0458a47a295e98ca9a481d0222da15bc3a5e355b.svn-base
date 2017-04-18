@@ -1,0 +1,244 @@
+package gui;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.tree.TreePath;
+
+import model.workspace.Document;
+import model.workspace.GraphicSlot;
+import model.workspace.Page;
+import view.DocView;
+import view.GraphicSlotView;
+import view.ProjectView;
+import actions.DeleteElementAction;
+import actions.NewDocumentAction;
+import actions.RedoAction;
+import actions.UndoAction;
+
+public class MyPalette extends JToolBar{
+	private JButton undo;
+	private JButton redo;
+	private JToggleButton selectMode;
+	private JToggleButton rectangle;
+	private JToggleButton circle;
+	private DocView dv = null;
+	
+	public MyPalette() {
+		super(JToolBar.VERTICAL);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		ButtonGroup group = new ButtonGroup();
+
+		selectMode=new JToggleButton();
+		selectMode.setToolTipText("Select mode");
+		selectMode.setIcon(new ImageIcon("slike/cursor.png"));
+		selectMode.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object o = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+				TreePath path = MyFrame.getInstance().getWorkspaceTree().getSelectionPath();
+				Object parent = path.getPathComponent(path.getPathCount()-2);
+				 if (o instanceof GraphicSlot){
+						Object grandpa = path.getPathComponent(path.getPathCount()-3);
+						Document d = (Document)grandpa;
+						GraphicSlot s = (GraphicSlot)o;
+						Page pg = (Page)parent;
+						//pg.removeGraphicSlot(s);
+
+
+						JInternalFrame frame = MyFrame.getInstance().getDesktop().getSelectedFrame();
+						ProjectView view = (ProjectView)frame;
+						JTabbedPane tabbDoc = (JTabbedPane)view.getContentPane().getComponent(0);
+						
+						for (int j = 0; j < tabbDoc.getTabCount(); j++)//krene od prvog do ukupnog broja tabova 
+						{	
+							if (tabbDoc.getTitleAt(j) == d.name)	//i poredi nazive(titlove) tabova sa nazivom dokumenta
+							{
+								tabbDoc.setSelectedIndex(j);
+								dv = view.getDocument(j);
+							}	
+						}
+						//JPanel docPanel = (JPanel)tabbDoc.getSelectedComponent();
+						//JPanel contentPanel = NewDocumentAction.GetDocumentContentPanel(docPanel);
+						JPanel contentPanel = dv.getContentPanel();
+						
+						int indPage = d.getPageIndex(pg);
+						for(int ind = 0;ind < contentPanel.getComponentCount();ind++){
+					    	JPanel pagePanel = (JPanel) contentPanel.getComponent(ind);
+					    	if(pg.getName() == pagePanel.getName()){
+					    		for(int slotInd = 0; slotInd < pagePanel.getComponentCount(); slotInd++){
+					    			if(pagePanel.getComponent(slotInd) instanceof GraphicSlotView){
+						    			GraphicSlotView slotPanel = (GraphicSlotView)pagePanel.getComponent(slotInd);
+						    			if (s.name == slotPanel.getName()){
+						    				
+						    				slotPanel.startSelectState();
+						    				
+						    			}
+					    			}
+					    		}
+					    	}
+						}
+				 }
+			}
+			
+		});
+		group.add(selectMode);
+		add(selectMode);
+		
+		addSeparator();
+
+		rectangle = new JToggleButton();
+		rectangle.setToolTipText("Rectangle");
+		rectangle.setIcon(new ImageIcon("slike/rectangle32x32.png"));
+		rectangle.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Object o = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+				TreePath path = MyFrame.getInstance().getWorkspaceTree().getSelectionPath();
+				Object parent = path.getPathComponent(path.getPathCount()-2);
+				 if (o instanceof GraphicSlot){
+						Object grandpa = path.getPathComponent(path.getPathCount()-3);
+						Document d = (Document)grandpa;
+						GraphicSlot s = (GraphicSlot)o;
+						Page pg = (Page)parent;
+						//pg.removeGraphicSlot(s);
+
+
+						JInternalFrame frame = MyFrame.getInstance().getDesktop().getSelectedFrame();
+						ProjectView view = (ProjectView)frame;
+						JTabbedPane tabbDoc = (JTabbedPane)view.getContentPane().getComponent(0);
+						
+						for (int j = 0; j < tabbDoc.getTabCount(); j++)//krene od prvog do ukupnog broja tabova 
+						{	
+							if (tabbDoc.getTitleAt(j) == d.name)	//i poredi nazive(titlove) tabova sa nazivom dokumenta
+							{
+								tabbDoc.setSelectedIndex(j);;
+								dv = view.getDocument(j);
+							}	
+						}
+						//JPanel docPanel = (JPanel)tabbDoc.getSelectedComponent();
+						//JPanel contentPanel = NewDocumentAction.GetDocumentContentPanel(docPanel);
+						JPanel contentPanel = dv.getContentPanel();
+						
+						int indPage = d.getPageIndex(pg);
+						for(int ind = 0;ind < contentPanel.getComponentCount();ind++){
+					    	JPanel pagePanel = (JPanel) contentPanel.getComponent(ind);
+					    	if(pg.getName() == pagePanel.getName()){
+					    		for(int slotInd = 0; slotInd < pagePanel.getComponentCount(); slotInd++){
+					    			if(pagePanel.getComponent(slotInd) instanceof GraphicSlotView){
+						    			GraphicSlotView slotPanel = (GraphicSlotView)pagePanel.getComponent(slotInd);
+						    			if (s.name == slotPanel.getName()){
+						    				//System.out.println(slotInd);
+						    				slotPanel.startRectangleState();
+						    				
+						    			}
+					    			}
+					    		}
+					    	}
+						}
+				}
+				
+			}
+			
+		});
+		group.add(rectangle);
+		add(rectangle);
+		
+		circle = new JToggleButton();
+	
+		circle.setToolTipText("Circle");
+		circle.setIcon(new ImageIcon("slike/circle32x32.png"));
+		circle.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Object o = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+				TreePath path = MyFrame.getInstance().getWorkspaceTree().getSelectionPath();
+				Object parent = path.getPathComponent(path.getPathCount()-2);
+				 if (o instanceof GraphicSlot){
+						Object grandpa = path.getPathComponent(path.getPathCount()-3);
+						Document d = (Document)grandpa;
+						GraphicSlot s = (GraphicSlot)o;
+						Page pg = (Page)parent;
+						//pg.removeGraphicSlot(s);
+
+
+						JInternalFrame frame = MyFrame.getInstance().getDesktop().getSelectedFrame();
+						ProjectView view = (ProjectView)frame;
+						JTabbedPane tabbDoc = (JTabbedPane)view.getContentPane().getComponent(0);
+						
+						for (int j = 0; j < tabbDoc.getTabCount(); j++)//krene od prvog do ukupnog broja tabova 
+						{	
+							if (tabbDoc.getTitleAt(j) == d.name)	//i poredi nazive(titlove) tabova sa nazivom dokumenta
+							{
+								tabbDoc.setSelectedIndex(j);;
+								dv = view.getDocument(j);
+							}	
+						}
+						//JPanel docPanel = (JPanel)tabbDoc.getSelectedComponent();
+						//JPanel contentPanel = NewDocumentAction.GetDocumentContentPanel(docPanel);
+						JPanel contentPanel = dv.getContentPanel();
+						
+						int indPage = d.getPageIndex(pg);
+						for(int ind = 0;ind < contentPanel.getComponentCount();ind++){
+					    	JPanel pagePanel = (JPanel) contentPanel.getComponent(ind);
+					    	if(pg.getName() == pagePanel.getName()){
+					    		for(int slotInd = 0; slotInd < pagePanel.getComponentCount(); slotInd++){
+					    			if(pagePanel.getComponent(slotInd) instanceof GraphicSlotView){
+						    			GraphicSlotView slotPanel = (GraphicSlotView)pagePanel.getComponent(slotInd);
+						    			if (s.name == slotPanel.getName()){
+						    				
+						    				slotPanel.startCircleState();
+						    			}
+						    		}
+					    		}
+					    	}
+						}
+				 }
+			}
+			
+		});
+		group.add(circle);
+		add(circle);
+		UndoAction undoAction = new UndoAction();
+		undo = new JButton(new ImageIcon("slike/Undo.png"));
+		undo.addActionListener(undoAction);
+
+		RedoAction redoAction = new RedoAction();
+		redo = new JButton(new ImageIcon("slike/redo.jpg"));
+		redo.addActionListener(redoAction);
+		
+		JButton delete = new JButton(new ImageIcon("slike/deleteG.png"));
+		delete.addActionListener(new DeleteElementAction());
+		add(undo);
+		add(redo);
+		add(delete);
+	
+	}
+	 public void enableRedoButton(boolean enable) {
+	     redo.setEnabled(enable);
+	   }
+	 public void enableUndoButton(boolean enable) {
+	     undo.setEnabled(enable);
+	   }
+	 ///////////////////////////////////
+	 public void setSelectButton(boolean selected){
+		 selectMode.setSelected(selected);
+	 }
+	 public void setRectangleButton(boolean selected){
+		 rectangle.setSelected(selected);
+	 }
+	 public void setCircleButton(boolean selected){
+		 circle.setSelected(selected);
+	 }
+}

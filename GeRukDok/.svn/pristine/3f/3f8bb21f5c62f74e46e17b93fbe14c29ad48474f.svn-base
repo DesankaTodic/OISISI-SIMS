@@ -1,0 +1,104 @@
+package model.elements;
+
+import java.awt.Color;
+import java.awt.Paint;
+import java.awt.Stroke;
+import java.io.Serializable;
+
+import serialization.d.SerializableStrokeAdapter;
+import view.painters.ElementPainter;
+
+/**
+ * Apstraktna klasa koja opisuje bilo koji element  mreže.
+ * Opisuje  elemente dijagrama
+ *
+ */
+public abstract class SlotElement implements Serializable{
+	
+	protected Paint paint;
+	protected SerializableStrokeAdapter stroke;
+	protected Color  strokeColor;
+	
+	protected String name;
+	protected String description;
+	
+	/**
+	 * Instanciranje ElementPainter-a obavljaju konkretni  elementi dijagrama
+	 * prilikom svoje konstrukcije 
+	 */
+	protected ElementPainter elementPainter;
+	
+	
+	
+	//metoda za kloniranje elemenata
+	abstract public SlotElement clone();
+	
+	
+	public SlotElement(Stroke stroke, Paint paint,Color  strokeColor){
+		setStroke(stroke);
+		this.paint = paint;
+		this.strokeColor=strokeColor;
+	}
+
+	/**Copy konstruktor klase
+
+	 * 
+	 */
+	public SlotElement(SlotElement element){
+		this.stroke=element.stroke;
+		this.paint=element.paint;
+		this.strokeColor=element.strokeColor;
+		this.name=element.name;
+		this.description=element.description;
+		this.elementPainter=element.elementPainter;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ElementPainter getPainter() {
+		return elementPainter;
+	}
+
+	public Paint getPaint() {
+		return paint;
+	}
+
+	public void setPaint(Paint paint) {
+		this.paint = paint;
+	}
+
+	public Stroke getStroke() {
+		return stroke;
+	}
+
+	public void setStroke(Stroke stroke) {
+		this.stroke = new SerializableStrokeAdapter(stroke);
+	}
+
+	public String toString(){
+		return name;
+	}
+
+	public Color getStrokeColor() {
+		return strokeColor;
+	}
+
+	public void setStrokeColor(Color strokeColor) {
+		this.strokeColor = strokeColor;
+	}
+
+
+	public ElementPainter getElementPainter() {
+		return elementPainter;
+	}
+
+
+	public void setElementPainter(ElementPainter elementPainter) {
+		this.elementPainter = elementPainter;
+	}
+}

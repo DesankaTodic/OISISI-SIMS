@@ -1,0 +1,71 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
+import javax.swing.JInternalFrame;
+import javax.swing.SwingUtilities;
+
+import model.workspace.Document;
+import model.workspace.Project;
+import view.DocView;
+import view.ProjectView;
+
+public class NewDocumentAction implements ActionListener {
+	public void actionPerformed(ActionEvent arg0) {
+		//
+		Object p = MyFrame.getInstance().getWorkspaceTree()
+				.getLastSelectedPathComponent();
+		if (p instanceof Project) {
+			Document d = new Document("New document", (Project) p);
+			((Project) p).addDocument(d);
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance()
+					.getWorkspaceTree());
+
+		}
+	}
+
+	/*
+	 * public static JPanel CreateTab(JTabbedPane tabbDoc, Document d) { JPanel
+	 * docPanel=new JPanel(); docPanel.putClientProperty("document", d);
+	 * 
+	 * //BoxLayout box=new BoxLayout(docPanel, BoxLayout.Y_AXIS);
+	 * //docPanel.setLayout(box);
+	 * 
+	 * docPanel.setLayout(new BorderLayout());
+	 * 
+	 * ImageIcon icon = new ImageIcon("New document.png");
+	 * tabbDoc.addTab(d.name, icon, docPanel, d.name);
+	 * tabbDoc.setSelectedIndex(tabbDoc.getTabCount() - 1);//cim doda novi tab
+	 * selektuje ga
+	 * 
+	 * JToolBar toolbar=new JToolBar();
+	 * docPanel.add(toolbar,BorderLayout.NORTH);
+	 * 
+	 * JPanel contentPanel = new JPanel(); contentPanel.setLayout(new
+	 * MigLayout()); contentPanel.setBackground(Color.gray);
+	 * 
+	 * JScrollPane scrolly=new JScrollPane(contentPanel);
+	 * scrolly.setHorizontalScrollBarPolicy
+	 * (JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	 * scrolly.setVerticalScrollBarPolicy
+	 * (JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	 * docPanel.add(scrolly,BorderLayout.CENTER);
+	 * 
+	 * for (int j = 1; j <= 16; j++) { JButton button=new JButton(""+j);
+	 * //button.setToolTipText("New project"); button.addActionListener(new
+	 * PageLayoutAction(j, contentPanel)); toolbar.add(button); }
+	 * 
+	 * return docPanel; }
+	 * 
+	 * public static JPanel GetDocumentContentPanel(JPanel docPanel) {
+	 * JScrollPane scrolly = (JScrollPane)docPanel.getComponent(1); JViewport
+	 * viewport = scrolly.getViewport(); //na ovaj nacin izvlacimo
+	 * komponentu-panel iz skrola JPanel contentPanel =
+	 * (JPanel)viewport.getView();//u taj panel kasnije smjestamo stranice
+	 * return contentPanel; }
+	 */
+}

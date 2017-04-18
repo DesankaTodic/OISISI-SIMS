@@ -1,0 +1,84 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+
+import model.workspace.Document;
+import model.workspace.GraphicSlot;
+import model.workspace.Page;
+import view.DocView;
+import view.GraphicSlotView;
+import view.PageView;
+import view.ProjectView;
+
+public class NewGraphicSlotAction implements ActionListener {
+	public GraphicSlot s;
+
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		Object p = MyFrame.getInstance().getWorkspaceTree()
+				.getLastSelectedPathComponent();
+		if (p instanceof Page) {
+			s = new GraphicSlot("New slot", (Page) p);
+			((Page) p).addGraphicSlot(s);
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance()
+					.getWorkspaceTree());
+
+			JInternalFrame[] frames = MyFrame.getInstance().getDesktop()
+					.getAllFrames();
+			for (JInternalFrame frame : frames) // prodji kroz sve frejmove
+			{
+				if (frame instanceof ProjectView)// ako je frejm instanca
+													// ProjectView
+				{
+					ProjectView view = (ProjectView) frame;
+					Document d = ((Page) p).getDocument();// dobijemo dokument
+															// kome pripada data
+															// stranica
+					if (((Document) d).getProject() == view.getProject()) // preuzmi
+																			// njegov
+																			// projekat
+					{
+						view.moveToFront(); // postavljenje projekta u fokus
+						try {
+							view.setSelected(true); // selekcija fokusiranog
+													// projekta
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						for(DocView dv : view.getDocuments())
+						{
+							if(dv.getName() == ((Document)d).getName())
+							{
+								for (PageView pv : dv.getPages()) {
+									if (pv.getName() == ((Page) p).getName()) {
+										GraphicSlotView slotView = new GraphicSlotView(s);
+										
+										//slotView.setGraphicSlot(s);
+										//s.setGraphicSlotView(slotView);
+										
+										pv.add(slotView);// na stranicu dodajemo slot
+										pv.addSlot((Object) slotView);
+										pv.repaint();
+										pv.validate();
+									}
+								}
+							}
+						}
+						
+
+					}
+				}
+			}
+		}
+	}
+}

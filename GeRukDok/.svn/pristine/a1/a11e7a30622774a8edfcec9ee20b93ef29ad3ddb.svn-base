@@ -1,0 +1,74 @@
+package model;
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import model.elements.SlotDevice;
+import model.elements.SlotElement;
+
+public class SlotModel {
+
+	private String name;
+	
+	protected ArrayList<SlotDevice> slotElements =new ArrayList <SlotDevice>();	
+	 int counter = 0;
+
+	/**
+	 * Pronalazi indeks elementa koji se nalazi na zadatim logickim koordinatama
+	 * @param point
+	 * @return
+	 */
+	/*public int getElementAtPosition(Point point) {
+		for(int i=getElementsCount()-1;i>=0;i--){
+			SlotElement element = getElementAt(i);
+			if(element.getPainter().isElementAt(point)){
+				return i;
+			}
+		}
+		return -1;
+	}	*/
+	 
+	public Iterator<SlotDevice> getElementsIterator(){
+		return slotElements.iterator();
+		
+	}
+	public void removeDevice(SlotDevice element){
+		
+		slotElements.remove(element);
+	}		
+	public int getDevicesCount(){
+		return slotElements.size();
+	}
+	//za davanje jedinstvenih imena elementima
+	public int getCounter(){
+		return counter++;
+	}
+	
+	public SlotDevice getDeviceAt(int i){
+		return slotElements.get(i);
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		return name;
+	}	
+	
+	public void addSlotDevice(SlotDevice element){
+		slotElements.add(element);
+	}	
+	
+	public ArrayList<SlotDevice >  getSlotDevices() {
+			return slotElements;
+	}
+
+	
+}

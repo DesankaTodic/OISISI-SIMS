@@ -1,0 +1,45 @@
+English = English
+
+Serbian = Serbian
+
+mniEngleski = English
+
+mniSrpski = Serbian
+
+mnuJezik = Language
+
+mnuProjekat = Project
+
+mnuNoviProjekat = New project
+
+mnuNoviDokument = New document
+
+mnuNovaStranica = New page
+
+mnuNoviGrafickiSlot = New graphic slot
+
+mnuNoviTekstualniSlot = New text slot
+
+mnuCuvanjeProjekta = Save project
+
+mnuOtvaranjeProjekta = Open project
+
+mnuProzori= Window
+
+mnuKaskadno = Cascade
+
+mnuVertikalno = Tile horizontally
+
+mnuHorizontalno = Tile vertically
+
+mnuMatricno = Matrix project view
+
+mnuPomoc = Help
+
+mnuBrisanje = Delete
+
+lblJezik = Active language:
+
+lblNikola = User: Nikola Majstorovic
+
+lblDesa = User: Desanka Todic

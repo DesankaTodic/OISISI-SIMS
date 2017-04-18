@@ -1,0 +1,127 @@
+package gui;
+
+import gui.listeners.MyWindowListener;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+
+import model.workspace.WorkspaceModel;
+import actions.DeleteElementAction;
+import actions.RedoAction;
+import actions.UndoAction;
+
+public class MyFrame extends JFrame{
+	
+
+	private static MyFrame instance=null;
+	private MyToolbar toolbar;
+	private Menu menu;
+	private StatusBar statusBar;
+	private JDesktopPane desktop;
+	private MyPalette palette;
+	
+    private WorkspaceModel workspaceModel;
+    private WorkspaceTree workspaceTree;
+    
+    private DeleteElementAction dea ;
+	
+	private MyFrame(){
+		addWindowListener(new MyWindowListener());
+	}
+	
+
+	private void initialise(){
+		initialiseWorkspaceTree();
+		initialiseGUI();
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			SwingUtilities.updateComponentTreeUI(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void initialiseGUI(){
+		dea = new DeleteElementAction();
+		
+		menu=new Menu();
+        setJMenuBar(menu);
+        
+        toolbar=new MyToolbar();
+        getContentPane().add(toolbar,BorderLayout.NORTH);
+        
+        palette =new MyPalette();
+		getContentPane().add(palette,BorderLayout.EAST);
+        
+        statusBar=new StatusBar();
+        getContentPane().add(statusBar,BorderLayout.SOUTH);
+        
+        desktop=new JDesktopPane();
+        desktop.setBackground(Color.WHITE);
+
+        JScrollPane scroll=new JScrollPane(workspaceTree);
+		scroll.setMinimumSize(new Dimension(200,150));
+		JSplitPane split=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scroll,desktop);
+		add(split,BorderLayout.CENTER);
+		split.setDividerLocation(250);
+		
+        setSize(900,700);
+        setTitle("GeRuDok - Tim4.2");
+        setLocationRelativeTo(null);
+        
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Image img=kit.getImage("slike/g.jpg");
+        setIconImage(img);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);   
+		
+		//JPanel panelStatusBar=new JPanel();
+		//add(panelStatusBar,BorderLayout.SOUTH);
+	}
+	private void initialiseWorkspaceTree(){
+		workspaceTree=new WorkspaceTree();
+		workspaceModel=new WorkspaceModel();
+		
+		workspaceTree.setModel(workspaceModel);
+		ToolTipManager.sharedInstance().registerComponent(workspaceTree);
+	}
+	
+	
+	public static MyFrame getInstance(){
+		  if (instance==null){
+			  instance=new MyFrame();
+			  instance.initialise();
+		  }
+		  return instance;
+		  
+	}
+	public JDesktopPane getDesktop(){
+		return desktop;
+	}
+	public WorkspaceTree getWorkspaceTree() {
+		return workspaceTree;
+	}
+	public MyPalette getPalette() {
+		return palette;
+	}
+
+	public WorkspaceModel getWorkspaceModel() {
+		return workspaceModel;
+	}
+	public DeleteElementAction getDeleteElementAction() {
+		return dea;
+	}
+	
+}

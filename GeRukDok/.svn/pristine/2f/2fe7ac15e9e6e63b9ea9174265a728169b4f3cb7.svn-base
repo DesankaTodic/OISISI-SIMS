@@ -1,0 +1,21 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+public class AboutDialogAction extends AbstractAction {
+	
+	public AboutDialogAction() {
+		super();
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		AboutDialog ad=new AboutDialog();
+		ad.setVisible(true);	
+	}
+
+}

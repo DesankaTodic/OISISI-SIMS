@@ -1,0 +1,46 @@
+package actions;
+	
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+	
+	
+public class AboutDialog extends JDialog  {
+	
+	public AboutDialog() {
+	
+		setSize(900,650);
+	
+		setLocationRelativeTo(null);
+
+		JPanel jp= new JPanel();
+
+		JLabel lab1=new JLabel();
+	
+			
+		lab1.setIcon(new ImageIcon("slike/nikola.jpg"));
+	
+		lab1.setText("Nikola Majstorovic RA 197/2012");
+	
+		
+	
+		jp.add(lab1);
+
+	
+		JLabel lab2=new JLabel();
+	
+	lab2.setIcon(new ImageIcon("slike/desa.png"));
+	
+	lab2.setText("Desanka Todic RA 14/2013");
+	
+		
+
+		jp.add(lab2);
+	
+	
+		add(jp);
+	}
+}

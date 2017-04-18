@@ -1,0 +1,97 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+
+import model.workspace.Document;
+import model.workspace.Page;
+import view.DocView;
+import view.PageView;
+import view.ProjectView;
+
+public class NewPageAction implements ActionListener{
+
+	public void actionPerformed(ActionEvent arg0) {
+		//
+		Object d=MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+		if (d instanceof Document) {
+			Page p = new Page("New page",(Document)d);
+			((Document)d).addPage(p);
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+			//preuzmi sve frejmove
+			JInternalFrame[] frames = MyFrame.getInstance().getDesktop().getAllFrames();
+			for (JInternalFrame frame : frames)	//prodji kroz sve frejmove
+			{
+				if (frame instanceof ProjectView)//ako je frejm instanca ProjectView
+				{
+					ProjectView view = (ProjectView)frame;
+					if (((Document)d).getProject() == view.getProject())				//preuzmi njegov projekat
+					{
+						view.moveToFront();			//postavljenje projekta u fokus
+						try {
+							view.setSelected(true);	//selekcija fokusiranog projekta
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}					
+						//prva komponenta(na indeksu 0) dodata na view je JTabbedPane
+						//u okviru nje dodajemo nove tabove koji predstavljaju dokumenta
+						
+						/*for(DocView dv : view.getDocuments())
+						{
+							if(dv.getName() == ((Document)d).getName())
+							{
+								JPanel content = dv.getContentPanel();
+							////////////////////////////////////desaaaa3.3.
+								PageView pv = new PageView(p);
+								dv.addPage(pv);//u listu stranica dodajem novu stranicu
+								content.add(pv,"wrap");
+								content.repaint();
+								content.validate();
+							/////////////////////////////////////	
+							}
+						}*/
+					}
+				}
+			}
+		}	
+	}
+	
+	/*public static JPanel addPage(JPanel docPanel, Document d, Page p)
+	{
+		JPanel pagePanel=new JPanel();
+		pagePanel.setBackground(Color.WHITE);
+		
+		pagePanel.setPreferredSize(new Dimension(700,700));
+		pagePanel.setName(p.getName());
+		pagePanel.setBackground(Color.WHITE);
+		pagePanel.setToolTipText(p.getName());
+		docPanel.add(pagePanel,"wrap");
+		
+		BoxLayout box=new BoxLayout(pagePanel, BoxLayout.PAGE_AXIS);
+		pagePanel.setLayout(box);
+		
+		//JLabel lab = new JLabel(p.getName(),SwingConstants.CENTER);
+		//lab.setPreferredSize(new Dimension(500,20));
+		//lab.setBackground(Color.green);
+		//pagePanel.add(lab,BorderLayout.SOUTH);
+	
+		pagePanel.addMouseListener(new PageMouseListener());
+		pagePanel.putClientProperty("page", p);
+
+		pagePanel.setBorder(new TitledBorder(new EtchedBorder(), p.getName()));
+		
+		docPanel.validate();
+		docPanel.repaint();
+		
+		return docPanel;
+	}*/
+}

@@ -1,0 +1,22 @@
+package view.painters;
+
+
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+
+import model.elements.DocumentElement;
+import model.elements.SlotElement;
+
+//ElementPainter je apstraktna klasa koja deklariše metode za iscrtavnje
+
+public abstract class ElementPainter {
+	public ElementPainter(SlotElement element) {
+	}
+	
+	public abstract void paint(Graphics2D g, SlotElement element);
+	
+	public abstract void paint(Graphics2D g, DocumentElement element);
+	
+	public abstract boolean isElementAt( Point pos);
+}

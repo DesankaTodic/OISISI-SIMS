@@ -1,0 +1,24 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+
+public class AboutDialogAction extends AbstractAction {
+	
+	public AboutDialogAction() {
+		super();
+		putValue(SMALL_ICON, new ImageIcon("slike/Info.png"));
+		putValue(NAME, "About GeRuDok");
+		putValue(SHORT_DESCRIPTION, "About GeRuDok");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		AboutDialog ad=new AboutDialog();
+		ad.setVisible(true);	
+	}
+
+}

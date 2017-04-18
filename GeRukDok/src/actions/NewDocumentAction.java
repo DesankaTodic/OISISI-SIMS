@@ -1,0 +1,41 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import model.workspace.Document;
+import model.workspace.Project;
+
+public class NewDocumentAction extends AbstractAction {
+	
+	public NewDocumentAction(){
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_D,Event.CTRL_MASK));
+		putValue(SMALL_ICON, new ImageIcon("slike/New document.png"));
+		putValue(NAME, "New document");
+		putValue(SHORT_DESCRIPTION, "New document");
+	}
+	public void changeName(){
+		putValue(NAME, MyFrame.getInstance().getResourceBundle().getString("mnuNoviDokument"));
+		putValue(SHORT_DESCRIPTION, MyFrame.getInstance().getResourceBundle().getString("mnuNoviDokument"));
+	}
+	public void actionPerformed(ActionEvent arg0) {
+		//
+		Object p = MyFrame.getInstance().getWorkspaceTree()
+				.getLastSelectedPathComponent();
+		if (p instanceof Project) {
+			Document d = new Document("New document", (Project) p);
+			((Project) p).addDocument(d);
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance()
+					.getWorkspaceTree());
+			
+		}
+	}
+}

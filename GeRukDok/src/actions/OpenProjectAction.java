@@ -1,0 +1,71 @@
+package actions;
+
+
+
+
+import gui.MyFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+
+public class OpenProjectAction extends AbstractAction {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public OpenProjectAction() {
+		
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
+		        KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		putValue(SMALL_ICON, new ImageIcon("slike/folder-open.png"));
+		putValue(NAME, "Open project");
+		putValue(SHORT_DESCRIPTION, "Open project");
+	}
+	public void changeName(){
+		putValue(NAME, MyFrame.getInstance().getResourceBundle().getString("mnuOtvaranjeProjekta"));
+		putValue(SHORT_DESCRIPTION, MyFrame.getInstance().getResourceBundle().getString("mnuOtvaranjeProjekta"));
+	}
+	/*
+	public void actionPerformed(ActionEvent arg0) {
+		JFileChooser jfc = new JFileChooser();
+		jfc.setFileFilter(new DocumentFileFilter());
+		
+		if(jfc.showOpenDialog(MyFrame.getInstance())==JFileChooser.APPROVE_OPTION){
+			try {
+				ObjectInputStream os = new ObjectInputStream(new FileInputStream(jfc.getSelectedFile()));
+				  
+				Project p=null;
+				try {
+					p = (Project) os.readObject();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
+			    
+			    //  MyFrame.getInstance().getWorkspaceTree().addProject(p);
+				
+				  for (int i=0;i<p.getDocumentCount();i++){
+					 DocumentView view=new DocumentView();
+				    view.setDocument(p.getDocument(i));
+				    
+				  MyFrame.getInstance().getDesktop().add(view);
+				}
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} 
+			
+		
+		
+	}
+	}*/
+}

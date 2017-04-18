@@ -1,0 +1,43 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyVetoException;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JInternalFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import model.workspace.Document;
+import model.workspace.GraphicSlot;
+import model.workspace.Page;
+import view.DocView;
+import view.GraphicSlotView;
+import view.PageView;
+import view.ProjectView;
+
+public class NewGraphicSlotAction extends AbstractAction {
+	public NewGraphicSlotAction(){
+		//putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S,Event.CTRL_MASK));
+		putValue(SMALL_ICON, new ImageIcon("slike/Component.png"));
+		putValue(NAME, "New graphic slot");
+		putValue(SHORT_DESCRIPTION, "New graphic slot");
+	}
+
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		Object p = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+		if (p instanceof Page) {
+			GraphicSlot s = new GraphicSlot("New slot", (Page) p);
+			((Page) p).addSlot(s);
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+		}
+	}
+}

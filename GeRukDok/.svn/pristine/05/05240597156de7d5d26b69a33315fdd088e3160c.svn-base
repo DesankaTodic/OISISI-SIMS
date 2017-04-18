@@ -1,0 +1,217 @@
+package gui;
+
+import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Locale;
+
+import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+
+import actions.AboutDialogAction;
+
+public class Menu extends JMenuBar {
+		private Object object;
+		JMenu mnuJezik;
+		JCheckBoxMenuItem mniSrpski;
+		JCheckBoxMenuItem mniEngleski;
+		JCheckBoxMenuItem mniSrpskiC;
+		JMenu mnuProjekat;
+		JMenu mnuProzori;
+		JMenu mnuPomoc;
+		////////prvo treba preuzeti apstraktnu akciju
+		AbstractAction newProjectAction = MyFrame.getInstance().getActionManager().getNewProjectAction();
+		AbstractAction newDocumentAction = MyFrame.getInstance().getActionManager().getNewDocumentAction();
+		AbstractAction newPageAction = MyFrame.getInstance().getActionManager().getNewPageAction();
+		AbstractAction newGraphicSlotAction = MyFrame.getInstance().getActionManager().getNewGraphicSlotAction();
+		AbstractAction newTextSlotAction = MyFrame.getInstance().getActionManager().getNewTextSlotAction();
+		AbstractAction DeleteAction = MyFrame.getInstance().getActionManager().getDeleteAction();		
+		AbstractAction saveProjectAction = MyFrame.getInstance().getActionManager().getSaveProjectAction();
+		AbstractAction OpenProjectAction = MyFrame.getInstance().getActionManager().getOpenProjectAction();	
+		AbstractAction cascadeAction = MyFrame.getInstance().getActionManager().getCascadeAction();
+		////////////////////////////////////////////////////////////////////////////////
+		Menu() 
+		{	
+			/////////////////////////////ovako se mijenjaju obicne stavke
+			mnuProjekat=new JMenu( MyFrame.getInstance().getResourceBundle().getString("mnuProjekat"));
+			////////////////////////////////////////////////////////////////
+			mnuProjekat.setMnemonic(KeyEvent.VK_P);
+			add(mnuProjekat);
+	
+
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuCuvanjeProjekta");
+			saveProjectAction.putValue("NAME", object);
+			mnuProjekat.add(saveProjectAction);
+			
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuOtvaranjeProjekta");
+			OpenProjectAction.putValue("NAME", object);
+			mnuProjekat.add(OpenProjectAction);
+	
+			//////////////ovako se pristupa stavki koja je apstraktna akcija
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuNoviProjekat");
+			newProjectAction.putValue("NAME", object);
+			mnuProjekat.add(newProjectAction);
+			///////////////////////////////////////////////////////////////
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuNoviDokument");
+			newDocumentAction.putValue("NAME", object);
+			mnuProjekat.add(newDocumentAction);
+			
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuNovaStranica");
+			newPageAction.putValue("NAME", object);
+			mnuProjekat.add(newPageAction);
+			
+			mnuProjekat.addSeparator();	
+			
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuNoviGrafickiSlot");
+			newGraphicSlotAction.putValue("NAME", object);
+			mnuProjekat.add(newGraphicSlotAction);
+			
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuNoviTekstualniSlot");
+			newTextSlotAction.putValue("NAME", object);
+			mnuProjekat.add(newTextSlotAction);
+
+			
+			mnuProjekat.addSeparator();	
+			
+	
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuBrisanje");
+			DeleteAction.putValue("NAME", object);
+			mnuProjekat.add(DeleteAction);
+	//-----------------------------------------------------------------	
+			mnuProzori=new JMenu( MyFrame.getInstance().getResourceBundle().getString("mnuProzori"));
+			////////////////////////////////////////////////////////////////
+			mnuProzori.setMnemonic(KeyEvent.VK_W);
+			add(mnuProzori);			
+	
+			object = MyFrame.getInstance().getResourceBundle().getString("mnuKaskadno");
+			cascadeAction.putValue("NAME", object);
+			mnuProjekat.add(cascadeAction);
+	
+			mnuProzori.add(MyFrame.getInstance().getActionManager().getTileHorizontallyAction());
+			
+	
+			mnuProzori.add(MyFrame.getInstance().getActionManager().getTileVerticallyAction());
+					
+	
+			mnuProzori.add(MyFrame.getInstance().getActionManager().getMatrixProjectViewAction());
+			
+		
+	
+			//////////////////////////lokalizacija
+			
+			
+			mnuJezik=new JMenu( MyFrame.getInstance().getResourceBundle().getString("mnuJezik"));
+			////////////////////////////////////////////////////////////////
+			mnuJezik.setMnemonic(KeyEvent.VK_W);
+			add(mnuJezik);		
+			
+			mniSrpskiC= new JCheckBoxMenuItem(MyFrame.getInstance().getResourceBundle().getString("mniSrpskiC"));
+			mniSrpskiC.setSelected(false);
+			mniSrpskiC.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Locale.setDefault(new Locale("sr","RS"));
+					MyFrame.getInstance().changeLanguage();
+					
+					
+				}
+			});
+			mnuJezik.add(mniSrpskiC);
+			
+			mniSrpski=new JCheckBoxMenuItem(MyFrame.getInstance().getResourceBundle().getString("mniSrpski"));
+			mniSrpski.setSelected(false);
+			mniSrpski.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Locale.setDefault(new Locale("sr","BA"));
+					MyFrame.getInstance().changeLanguage();
+					
+					
+				}
+			});
+			mnuJezik.add(mniSrpski);
+			
+			//////////////default jezik je engleski
+			mniEngleski=new JCheckBoxMenuItem(MyFrame.getInstance().getResourceBundle().getString("mniEngleski"));
+			mniEngleski.setSelected(true);
+			mniEngleski.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Locale.setDefault(new Locale("en","US"));
+					MyFrame.getInstance().changeLanguage();
+				}
+			});
+			mnuJezik.add(mniEngleski);
+			
+			
+			ButtonGroup bg=new ButtonGroup();
+			bg.add(mniSrpskiC);
+			bg.add(mniSrpski);
+			bg.add(mniEngleski);
+			//////////////////////////////////////////////////////////////////////////
+		
+			mnuPomoc=new JMenu( MyFrame.getInstance().getResourceBundle().getString("mnuPomoc"));
+			add(mnuPomoc);
+		
+			JMenuItem aboutGeRuDoc=new JMenuItem("About GeRuDoc");	
+			aboutGeRuDoc.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,Event.CTRL_MASK));
+			aboutGeRuDoc.addActionListener(new AboutDialogAction());
+			mnuPomoc.add(aboutGeRuDoc);
+		}
+		
+		public void initComponents(){
+			/////////////komponente koje su stalno vidljive potrebno je dodatno osvjeziti
+			///////////////za obicne stavke 
+			mnuProjekat.setText(MyFrame.getInstance().getResourceBundle().getString("mnuProjekat"));
+			///////////////////////////////
+			
+			mnuProzori.setText(MyFrame.getInstance().getResourceBundle().getString("mnuProzori"));
+			
+			
+			
+			mnuPomoc.setText(MyFrame.getInstance().getResourceBundle().getString("mnuPomoc"));
+			
+			
+			mnuJezik.setText(MyFrame.getInstance().getResourceBundle().getString("mnuJezik"));
+			
+			mniEngleski.setText(MyFrame.getInstance().getResourceBundle().getString("mniEngleski"));
+			
+			mniSrpski.setText(MyFrame.getInstance().getResourceBundle().getString("mniSrpski"));
+			
+			String scv = MyFrame.getInstance().getResourceBundle().getString("mnuCuvanjeProjekta");
+			mnuProjekat.getItem(0).setText(scv);
+			
+			String sot = MyFrame.getInstance().getResourceBundle().getString("mnuOtvaranjeProjekta");
+			mnuProjekat.getItem(1).setText(sot);
+			
+			///////////////osvjezavanje za stavke koje su apstraktne
+			String s = MyFrame.getInstance().getResourceBundle().getString("mnuNoviProjekat");
+			//newProjectAction.putValue("NAME", s);
+			mnuProjekat.getItem(2).setText(s);
+			///////////////////////////////////////////////////////////////
+			String sd = MyFrame.getInstance().getResourceBundle().getString("mnuNoviDokument");
+			mnuProjekat.getItem(3).setText(sd);
+			
+			String ss = MyFrame.getInstance().getResourceBundle().getString("mnuNovaStranica");
+			mnuProjekat.getItem(4).setText(ss);
+			
+			String sg = MyFrame.getInstance().getResourceBundle().getString("mnuNoviGrafickiSlot");
+			mnuProjekat.getItem(6).setText(sg);
+			
+			String st = MyFrame.getInstance().getResourceBundle().getString("mnuNoviTekstualniSlot");
+			mnuProjekat.getItem(7).setText(st);		
+			
+			String sb = MyFrame.getInstance().getResourceBundle().getString("mnuBrisanje");
+			mnuProjekat.getItem(9).setText(sb);
+			
+		}
+}

@@ -1,0 +1,55 @@
+package model.elements;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Paint;
+import java.awt.Stroke;
+import java.awt.geom.Point2D;
+
+import model.workspace.Rectangle;
+import view.painters.RectanglePainter;
+
+
+public class RectangleElement extends SlotDevice {
+	Rectangle rectangle;
+	
+	public RectangleElement(Point2D position, Dimension size, Stroke stroke, Paint paint, Color strokeColor) {
+		super(position, size, stroke, paint,strokeColor,2,1);
+		elementPainter = new RectanglePainter(this);
+	}
+
+	
+	public RectangleElement(RectangleElement rectangle){
+		super(rectangle);
+		setName("rectangle");
+		elementPainter=new RectanglePainter(this);
+	}
+	
+	
+	public static SlotDevice createDefault(Point2D pos, int elemNo){
+		Point2D position = (Point2D) pos.clone();
+		
+        Paint fill = Color.WHITE;
+        RectangleElement rectangleElement=new RectangleElement(position, 
+	    		                       new Dimension(80,40),
+	    		                      new BasicStroke((float)(5), BasicStroke.CAP_SQUARE,BasicStroke.JOIN_BEVEL ),
+             	                      fill,
+	    		                      Color.BLACK);
+        rectangleElement.setName("Rectangle" + elemNo);
+		return rectangleElement;
+	}
+	
+	@Override
+	public SlotElement clone() {
+		// TODO Auto-generated method stub
+		return new RectangleElement(this);
+	}
+	public Rectangle getRectangle(){
+		return rectangle;
+	}
+	
+	public void setRectangle(Rectangle c){
+		rectangle = c;
+	}
+}

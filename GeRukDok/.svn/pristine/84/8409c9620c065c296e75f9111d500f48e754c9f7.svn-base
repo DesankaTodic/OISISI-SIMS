@@ -1,0 +1,23 @@
+package actions;
+
+import gui.MyFrame;
+import gui.WorkspaceTree;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.SwingUtilities;
+
+import model.workspace.Project;
+
+public class NewProjectAction implements ActionListener {
+
+public void actionPerformed(ActionEvent arg0) {
+		
+		Project p=new Project(" ");
+		WorkspaceTree tree = MyFrame.getInstance().getWorkspaceTree();
+		tree.getRoot().addProject(p);
+		SwingUtilities.updateComponentTreeUI(MyFrame.getInstance()
+				.getWorkspaceTree());
+	}
+}

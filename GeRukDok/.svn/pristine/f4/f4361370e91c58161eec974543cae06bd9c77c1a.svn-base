@@ -1,0 +1,76 @@
+package model.workspace;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Observable;
+
+import javax.swing.tree.TreeNode;
+
+import event.ModelUpdateEvent;
+
+public class Workspace extends Observable implements TreeNode {
+	private ArrayList<Project> projects = new ArrayList<Project>();
+	private int projectCounter = 0; 
+	
+	public Workspace(){
+		super();
+	}
+	public String toString(){
+		return "Workspace";
+	}
+	public TreeNode getChildAt(int arg0) {
+		return getProject(arg0);
+	}
+	public int getChildCount() {
+		return getProjectsCount();
+	}
+	public TreeNode getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public int getIndex(TreeNode arg0) {
+		return getProjectIndex((Project) arg0);
+	}
+	public boolean getAllowsChildren() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	public boolean isLeaf() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public Enumeration<Document> children() {
+		// TODO Auto-generated method stub
+		return (Enumeration<Document>) projects;
+	}
+	public void addProject(Project project){
+		projects.add(project);
+		project.setName("Project: " + ++projectCounter);
+		///////////////////observer metode
+		ModelUpdateEvent event = new ModelUpdateEvent((Object)project,true,false);
+		setChanged();
+		notifyObservers(event);
+		///////////////////////////////////
+	}
+	//metoda za brisanje projekta iz liste
+	public void removeProject(Project project){
+		projects.remove(project);
+		///////////////////observer metode
+		ModelUpdateEvent event = new ModelUpdateEvent((Object)project,false,true);
+		setChanged();
+		notifyObservers(event);
+		///////////////////////////////////
+
+	}
+	
+	public Project getProject(int index) {
+		return projects.get(index);
+	}
+	public int getProjectIndex(Project project) {
+		return projects.indexOf(project);
+	}
+	public int getProjectsCount() {
+		return projects.size();
+	}
+
+}

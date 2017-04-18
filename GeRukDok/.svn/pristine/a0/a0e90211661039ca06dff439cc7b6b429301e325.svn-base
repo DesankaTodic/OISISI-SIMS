@@ -1,0 +1,66 @@
+package view;
+
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JPanel;
+
+import model.elements.SlotElement;
+import model.workspace.GraphicSlot;
+
+public class Framework extends JPanel implements Observer{
+	//klasa koja predstavlja panel na koji se iscrtavaju graficki elementi
+	DialogGraphicSlot dialog = null;
+	GraphicSlot graphicSlot = null;
+	public Framework(DialogGraphicSlot dialog,GraphicSlot graphicSlot) {
+
+		this.graphicSlot = graphicSlot;
+		this.dialog = dialog;
+		setBackground(Color.WHITE);
+		graphicSlot.addObserver(this);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		repaint();
+	}
+
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+				0.8f));
+		Iterator<SlotElement> it = graphicSlot.getModel()
+				.getElementsIterator();
+		SlotElement device = null;
+		while (it.hasNext()) {
+			device = it.next();
+			// ElementPainter painter = element.getPainter();
+
+			// /painter.paint(g2, element);
+
+			if (device instanceof SlotElement) {
+				g2.setPaint(Color.BLACK);
+				g.drawString(device.getName(), (int) device.getPosition()
+						.getX() + 10, (int) device.getPosition().getY()
+						+ (int) device.getSize().getHeight() / 2);
+			}
+
+			// ovaj deo iscrtava element
+			g2.setPaint(device.getStrokeColor());
+			g2.setStroke(device.getStroke());
+			g2.draw(device.getShape());
+
+			g2.setPaint(device.getPaint());
+			g2.fill(device.getShape());
+			repaint();
+
+			}
+		}
+}

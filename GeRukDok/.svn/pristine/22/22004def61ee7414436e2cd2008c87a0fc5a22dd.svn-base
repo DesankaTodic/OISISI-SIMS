@@ -1,0 +1,36 @@
+package state;
+
+import view.GraphicSlotView;
+
+public class StateManager {
+	private State currentState;
+	
+	
+	CircleState circleState; 
+	//LinkState linkState;
+	RectangleState rectangleState;
+	SelectState selectState;
+	
+	public StateManager() {
+		
+	}
+	
+	public StateManager(GraphicSlotView med)
+	{
+		 
+		circleState = new CircleState(med); 
+		//linkState = new LinkState(med); 
+		rectangleState=new RectangleState(med);
+		selectState=new SelectState(med);
+     	currentState = selectState;
+		//currentState = rectangleState;
+	}
+	
+	public void setCircleState() { currentState = circleState; }
+	//public void setLinkState(){ currentState = linkState; }
+	public void setRectangleState(){ currentState = rectangleState; }
+	public void setSelectState(){ currentState = selectState; }
+	public State getCurrentState() {
+		return currentState;
+	}
+}

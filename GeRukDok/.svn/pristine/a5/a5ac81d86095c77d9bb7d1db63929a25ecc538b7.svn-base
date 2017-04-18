@@ -1,0 +1,87 @@
+package controller;
+
+
+import gui.MyFrame;
+
+import java.awt.Component;
+import java.beans.PropertyVetoException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+
+import model.workspace.Document;
+import model.workspace.Project;
+import view.ProjectView;
+
+public class WorkspaceTreeController implements TreeSelectionListener{
+	public void valueChanged(TreeSelectionEvent e) {
+		// TODO Auto-generated method stub
+		TreePath path = e.getPath();//putanja objekta ciji je dogadjaj registrovao listener
+		ProjectView view = null;//posto putanja ima oblik od Workspace-Project-Document itd.
+								//respektivno indeksi su 0-1-2 itd.
+								//for krece korijena(0) do duzine putanje 
+								//i unutar njega provjeravamo currentNode odnosno nad kojim cvorom  
+								//se desio dogadjaj i stavljamo ga u fokus
+								//posto krece od korijena ka listovima prvo stavlja u fokus projekat, pa dokument itd.
+		for(int i = 0; i < path.getPathCount(); i++){
+			Object currentNode = path.getPathComponent(i);
+			if(currentNode instanceof Project){
+				Project p = (Project)currentNode;
+				
+				view = FindAndFocusProjectView(p);
+				
+				System.out.println("Selektovan projekat:" + p);	
+				System.out.println("getPath: " + e.getPath());
+				System.out.println("getPath: " + e.getNewLeadSelectionPath());
+			} else if (currentNode instanceof Document){
+				Document d = (Document)currentNode;
+
+				if (view != null)
+				{
+					//preuzima kontrolu koja obuhvata tabove
+					JTabbedPane tabbDoc = (JTabbedPane)view.getContentPane().getComponent(0);
+					
+					for (int j = 0; j < tabbDoc.getTabCount(); j++)//krene od prvog do ukupnog broja tabova 
+					{	
+						if (tabbDoc.getTitleAt(j) == d.name)	//i poredi nazive(titlove) tabova sa nazivom dokumenta
+						{
+							tabbDoc.setSelectedIndex(j);
+						}	
+					}
+				}
+			}
+		}
+	}
+	//metoda koja stavlja projekat u fokus i oznaci ga kao selektovan
+	//a vraca ProjectView da bismo kasnije mogli da preuzmemo komponente iz njega
+	private ProjectView FindAndFocusProjectView(Project p)
+	{
+		JInternalFrame[] frames = MyFrame.getInstance().getDesktop().getAllFrames();
+		for (JInternalFrame frame : frames)
+		{
+			if (frame instanceof ProjectView)
+			{
+				ProjectView view = (ProjectView)frame;
+				if (p == view.getProject())
+				{
+					view.moveToFront();
+					try {
+						view.setSelected(true);
+					} catch (PropertyVetoException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					return view;
+				}
+			}
+		}
+		
+		return null;
+	}
+}

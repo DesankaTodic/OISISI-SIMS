@@ -1,0 +1,40 @@
+package view;
+
+import gui.listeners.TextSlotMouseListener;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+import model.workspace.TextSlot;
+		
+
+public class TextSlotView extends JPanel{
+	private TextSlot slot = null;
+	private JTextArea txt = new JTextArea();
+	public TextSlotView(TextSlot s){
+		//super();
+		slot=s;
+		setBorder(new TitledBorder(new EtchedBorder(), s.getName()));
+	    this.setLayout(new BorderLayout());
+
+		setName(s.getName());
+		
+		Font font = new Font("Verdana", Font.BOLD, 20);
+		txt.setFont(font);
+		//txt.setMinimumSize(new Dimension(100,100));
+		this.setPreferredSize(new Dimension(500,200));
+		this.setBackground(Color.white);
+		addMouseListener(new TextSlotMouseListener());
+		putClientProperty("textSlot", s);
+		add(txt);
+		repaint();
+		validate();
+	}
+}

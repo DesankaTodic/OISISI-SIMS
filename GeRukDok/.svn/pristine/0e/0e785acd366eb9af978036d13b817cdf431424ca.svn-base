@@ -1,0 +1,33 @@
+package view.painters;
+
+import java.awt.geom.GeneralPath;
+
+import model.elements.RectangleElement;
+import model.elements.SlotElement;
+
+
+/* Konkretan painter je zaduzen za definisanje Shape objekta koji predstavlja dati element
+
+ */
+public class RectanglePainter extends DevicePainter{
+
+	public RectanglePainter(SlotElement device) {
+		super(device);
+		
+		RectangleElement rectangle = (RectangleElement) device;
+
+		shape=new GeneralPath();
+		((GeneralPath)shape).moveTo(rectangle.getPosition().getX(),rectangle.getPosition().getY());
+		
+		((GeneralPath)shape).lineTo(rectangle.getPosition().getX()+rectangle.getSize().width,rectangle.getPosition().getY());
+		
+		((GeneralPath)shape).lineTo(rectangle.getPosition().getX()+rectangle.getSize().width,rectangle.getPosition().getY()+rectangle.getSize().height);
+		
+		((GeneralPath)shape).lineTo(rectangle.getPosition().getX(),rectangle.getPosition().getY()+rectangle.getSize().height);
+		
+		((GeneralPath)shape).closePath();
+
+		
+	}
+
+}

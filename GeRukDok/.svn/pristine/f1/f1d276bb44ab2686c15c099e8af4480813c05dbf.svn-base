@@ -1,0 +1,109 @@
+package model;
+
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.event.EventListenerList;
+
+import model.elements.SlotElement;
+import event.UpdateEvent;
+import event.UpdateListener;
+
+public class SlotModel {
+
+	private String name;
+	
+	protected ArrayList<SlotElement> slotElements =new ArrayList <SlotElement>();	
+	transient  EventListenerList listenerList = new EventListenerList();
+	UpdateEvent updateEvent = null;
+	 int counter = 0;
+	 
+	private Object readResolve(){
+		listenerList = new EventListenerList();	
+		return this;
+	}	
+
+	/**
+	 * Pronalazi indeks elementa koji se nalazi na zadatim logickim koordinatama
+	 * @param point
+	 * @return
+	 */
+	public int getElementAtPosition(Point point) {
+		for(int i=getElementsCount()-1;i>=0;i--){
+			SlotElement element = getElementAt(i);
+			if(element.getPainter().isElementAt(point)){
+				return i;
+			}
+		}
+		return -1;
+	}	
+	public void removeElement(SlotElement element){
+		
+		slotElements.remove(element);
+		fireUpdatePerformed();
+	}		
+	public int getElementsCount(){
+		return slotElements.size();
+	}
+	//za davanje jedinstvenih imena elementima
+	public int getCounter(){
+		return counter++;
+	}
+	
+	public SlotElement getElementAt(int i){
+		return slotElements.get(i);
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		return name;
+	}	
+	
+	public Iterator<SlotElement> getElementsIterator(){
+		return slotElements.iterator();
+	}
+	
+	public void addSlotElement(SlotElement element){
+		slotElements.add(element);
+		fireUpdatePerformed();
+	}	
+	
+		
+	 public void addUpdateListener(UpdateListener l) {
+	     listenerList.add(UpdateListener.class, l);
+	 }
+
+	 public void removeUpdateListener(UpdateListener l) {
+	     listenerList.remove(UpdateListener.class, l);
+	 }
+	 
+	public ArrayList<SlotElement>  getSlotElements() {
+			return slotElements;
+	}
+		
+
+	 /**
+	 * Javljamo svim listenerima da se dogadjaj desio 
+	 */
+	public void fireUpdatePerformed() {
+	     Object[] listeners = listenerList.getListenerList();
+	     for (int i = listeners.length-2; i>=0; i-=2) {
+	         if (listeners[i]==UpdateListener.class) {
+	             if (updateEvent == null)
+	                 updateEvent = new UpdateEvent(this);
+	             ((UpdateListener)listeners[i+1]).updatePerformed(updateEvent);
+	         }
+	     }
+	 }	
+	
+}

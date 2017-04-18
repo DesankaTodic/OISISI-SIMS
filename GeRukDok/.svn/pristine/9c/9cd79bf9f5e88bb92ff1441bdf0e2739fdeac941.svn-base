@@ -1,0 +1,88 @@
+package model.workspace;
+
+
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.event.EventListenerList;
+
+import model.elements.DocumentElement;
+import state.StateManager;
+import event.UpdateListener;
+
+
+
+
+/**
+ * 
+ * U sebi æe sadržati kolekciju grafièkih elemenata
+ * takoðe æe imati i podršku za tree view komponentu
+ * @author I. Zecevic
+ *
+ */
+public class DocumentModel {
+
+	private static int count=0;
+	private String name;
+	private StateManager stateManager=new StateManager();
+	protected ArrayList documentElements =new ArrayList();
+	EventListenerList listenerList = new EventListenerList();
+
+	 
+	 
+	
+
+
+
+	public static int getCount() {
+		return count;
+	}
+
+
+	public static void setCount(int count) {
+		DocumentModel.count = count;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		return name;
+	}	
+	public int getElementCount(){
+		return documentElements.size();
+	}
+	
+	 public void addUpdateListener(UpdateListener l) {
+		 //if (listenerList==null) listenerList=new EventListenerList();
+	     listenerList.add(UpdateListener.class, l);
+	 }
+	 public void addUpdateListener(Project p) {
+		 //if (listenerList==null) listenerList=new EventListenerList();
+
+	 }
+		public StateManager getStateManager() {
+			return stateManager;
+		}
+	 
+	 /**
+	 * Javljamo svim listenerima da se dogadjaj desio 
+	 */
+
+		public Iterator<DocumentElement> getDeviceIterator(){
+			return documentElements.iterator();
+		}
+	
+}

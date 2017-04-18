@@ -1,0 +1,83 @@
+package view.painters;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Shape;
+import java.util.Iterator;
+
+
+
+import model.elements.DocumentElement;
+import model.elements.SlotDevice;
+import model.elements.SlotElement;
+
+
+/*
+ DevicePainter je zaduzen za crtanje uredjaja kao i za detekciju pogotka
+ za sta koristi Shape.
+*/
+
+public class DevicePainter extends ElementPainter {
+	
+	protected Shape shape;
+	
+	public DevicePainter(SlotElement device){
+		super(device);
+	}
+	
+	
+	public void paint(Graphics2D g, SlotElement element){
+		
+
+		
+		if (element instanceof SlotDevice){	
+			SlotDevice device=(SlotDevice )element;
+			  //ako se iscrtava element, trebaju da se iscrtaju i njegovi ulazi i izlazi 
+  	   		  /*Iterator it = device.getInputIterator();
+			  while(it.hasNext()){
+				    InputOutputElement d = (InputOutputElement) it.next();
+				    d.getPainter().paint(g,d);
+   			  } 
+			  Iterator it2 = device.getOutputIterator();
+			  while(it2.hasNext()){
+				    InputOutputElement d2 = (InputOutputElement) it2.next();
+				    d2.getPainter().paint(g,d2);
+					
+		     }	*/
+			  
+			  g.setPaint(Color.BLACK);
+			  g.drawString(device.getName(), (int)device.getPosition().getX()+10, 
+											   (int)device.getPosition().getY()+(int)device.getSize().getHeight()/2);
+		}
+
+		//ovaj deo iscrtava element 
+		g.setPaint(element.getStrokeColor());
+		g.setStroke(element.getStroke());
+		g.draw(getShape());
+
+		
+		g.setPaint(element.getPaint());
+		g.fill(getShape());	
+	}
+	
+	public boolean isElementAt( Point pos){
+		return getShape().contains(pos);
+	}
+
+	public Shape getShape() {
+		return shape;
+	}
+
+	public void setShape(Shape shape) {
+		this.shape = shape;
+	}
+
+
+	@Override
+	public void paint(Graphics2D g, DocumentElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

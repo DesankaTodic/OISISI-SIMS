@@ -1,0 +1,153 @@
+package commands;
+
+import gui.MyFrame;
+
+import java.awt.geom.Point2D;
+
+import javax.swing.SwingUtilities;
+
+import model.SlotModel;
+import model.SlotSelectionModel;
+import model.elements.CircleElement;
+import model.elements.RectangleElement;
+import model.elements.SlotElement;
+import model.workspace.Circle;
+import model.workspace.GraphicSlot;
+import model.workspace.Rectangle;
+import view.GraphicSlotView;
+
+
+
+public class DeleteDeviceCommand extends AbstractCommand{
+	SlotModel model;
+	Point2D lastPosition;
+	SlotElement device = null;
+	SlotSelectionModel selectionModel;
+	int deviceType;
+	Object obj;
+	
+	public DeleteDeviceCommand(SlotModel model,SlotSelectionModel selectionModel, Point2D lastPosition,int deviceType,Object m) {
+		this.model = model;
+		this.lastPosition = lastPosition;
+		this.selectionModel = selectionModel;
+		this.deviceType=deviceType;	
+		obj=m;
+		//device = se;
+
+	}
+
+	@Override
+	public void doCommand() {
+		
+			System.out.println("*****DELETE******REDO*****");
+			if(device!=null){
+				//selectionModel.removeAllFromSelectionList();
+				model.removeElement(device);
+
+				
+				Object p = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+				//brisanje kruga u stablo
+				if (p  instanceof GraphicSlot) {
+					GraphicSlot gs = ((GraphicSlot) p);
+					//gs.getGraphicSlotView().repaint();
+					((GraphicSlotView) obj).repaint();
+					if(device instanceof CircleElement){
+						//Circle r = new Circle("New Circle",gs);
+						CircleElement ce = (CircleElement)device;
+						Circle r = ce.getCircle();
+						//r.setName(ce.getName());
+						
+						//r.setCircleElement(ce);
+						//ce.setCircle(r);
+						
+						gs.removeCircle(r);
+						//System.out.println("Brisi iz stabla krug!");
+						SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+		
+					}else if(device instanceof RectangleElement){
+						//Rectangle r = new Rectangle("New Rectangle",gs);
+						RectangleElement re = (RectangleElement)device;
+						Rectangle r = re.getRectangle();
+						r.setName(re.getName());
+						
+						//r.setRectangleElement(re);
+						//re.setRectangle(r);
+						
+						gs.removeRectangle(r);
+						//System.out.println("Brisi iz stabla pravougaonik!");
+						SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());	
+				}
+			}
+		}
+	}
+
+	@Override
+	public void undoCommand() {
+		
+			System.out.println("*****DELETE************UNDO");
+			if (deviceType==GraphicSlotView.CIRCLE){
+				device=CircleElement.createDefault(lastPosition,model.getElementsCount());
+				//device=CircleElement.createDefault(lastPosition,model.getCounter());
+
+				Object p = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+				//dodavanje kruga u stablo
+				if (obj  instanceof GraphicSlotView) {
+					GraphicSlot gs = ((GraphicSlotView) obj).getGraphicSlot();
+					//System.out.println(gs.getGraphicSlotView().getName());
+					//gs.getGraphicSlotView().repaint();
+					((GraphicSlotView) obj).repaint();
+					
+						Circle r = new Circle("New Circle",gs);
+						CircleElement ce = (CircleElement)device;
+						//r.setName(ce.getName());
+						
+						r.setCircleElement(ce);//vezuje CircleElement sa cvorom Circle
+						ce.setCircle(r);
+						
+						gs.addCircles(r,ce.getName());
+						SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+
+					
+				}
+				
+				
+			}else if (deviceType==GraphicSlotView.RECTANGLE){
+				device=RectangleElement.createDefault(lastPosition,model.getElementsCount());
+				//device=RectangleElement.createDefault(lastPosition,model.getCounter());
+				System.out.println("Dodaj u stablo pravougaonik!");
+				//dodavanje pravougaonika u stablo
+				if (obj  instanceof GraphicSlotView) {
+					
+						GraphicSlot gs = ((GraphicSlotView) obj).getGraphicSlot();
+						//gs.getGraphicSlotView().repaint();
+						((GraphicSlotView) obj).repaint();
+					
+							Rectangle r = new Rectangle("New Rectangle",gs);
+							RectangleElement re = (RectangleElement)device;
+							//r.setName(re.getName());
+							
+							r.setRectangleElement(re);
+							re.setRectangle(r);
+							
+							gs.addRectangles(r,re.getName());
+							SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+					
+					}
+				}
+
+		//selectionModel.removeAllFromSelectionList();
+		
+		model.addSlotElement(device);	
+		
+		//selectionModel.addToSelectionList(device);
+		}
+	
+}
+
+
+
+	
+
+
+
+

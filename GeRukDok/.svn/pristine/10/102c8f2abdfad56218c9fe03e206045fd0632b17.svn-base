@@ -1,0 +1,76 @@
+package view;
+
+import gui.listeners.PageMouseListener;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Observer;
+
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+import model.workspace.Page;
+
+public class PageView extends JPanel{
+	private Page page = null;
+
+	//private ArrayList<GraphicSlotView> gslots = new ArrayList<GraphicSlotView>();
+	//private ArrayList<TextSlotView> tslots = new ArrayList<TextSlotView>();
+	private ArrayList<Object> slots = new ArrayList<Object>();
+	
+	public PageView( Page p){
+		//JPanel pagePanel=new JPanel();
+		setBackground(Color.WHITE);
+		
+		setPreferredSize(new Dimension(700,700));
+		setName(p.getName());
+		setBackground(Color.WHITE);
+		setToolTipText(p.getName());
+		page = p;
+
+		//docPanel.add(this,"wrap");
+		
+		BoxLayout box=new BoxLayout(this, BoxLayout.PAGE_AXIS);
+		setLayout(box);
+		
+		//JLabel lab = new JLabel(p.getName(),SwingConstants.CENTER);
+		//lab.setPreferredSize(new Dimension(500,20));
+		//lab.setBackground(Color.green);
+		//pagePanel.add(lab,BorderLayout.SOUTH);
+	
+		addMouseListener(new PageMouseListener());
+		putClientProperty("page", p);
+
+		setBorder(new TitledBorder(new EtchedBorder(), p.getName()));
+		
+		//docPanel.validate();
+		//docPanel.repaint();
+	}
+	public Page getPage(){
+		return page;
+	}
+	public void setPage(Page p){
+		page = p;
+	}
+	/////vraca liste
+	public ArrayList<Object> getSlots() {
+		return slots;
+	}
+	//brisanje iz lista
+	public void removeSlot(Object slot){
+		slots.remove(slot);	
+	}	
+
+	//vraca element liste
+	public Object getSlot(int index) {
+		return slots.get(index);
+	}
+	//dodaje u listu
+	public void addSlot(Object slot){
+		slots.add(slot);	
+	}
+
+}

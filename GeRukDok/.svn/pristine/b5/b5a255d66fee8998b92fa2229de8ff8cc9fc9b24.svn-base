@@ -1,0 +1,120 @@
+package commands;
+
+import gui.MyFrame;
+import gui.WorkspaceTree;
+
+import java.awt.geom.Point2D;
+
+import javax.swing.SwingUtilities;
+import javax.swing.tree.TreePath;
+
+import model.SlotModel;
+import model.SlotSelectionModel;
+import model.elements.CircleElement;
+import model.elements.RectangleElement;
+import model.elements.SlotElement;
+import model.workspace.GraphicSlot;
+import view.GraphicSlotView;
+
+
+public class AddDeviceCommand  extends AbstractCommand{
+
+	SlotModel model;
+	Point2D lastPosition;
+	SlotElement element = null;
+	SlotSelectionModel selectionModel;
+	int elementType;
+	Object obj;
+	
+	public AddDeviceCommand(SlotModel model,SlotSelectionModel selectionModel, Point2D lastPosition,int elementType,Object m) {
+		this.model = model;
+		this.lastPosition = lastPosition;
+		this.selectionModel = selectionModel;
+		this.elementType=elementType;	
+		obj=m;
+
+	}
+
+	@Override
+	public void doCommand() {
+			System.out.println("*****DO");
+			if (elementType==GraphicSlotView.CIRCLE){
+				System.out.println("*****createee");
+				element=CircleElement.createDefault(lastPosition,model.getElementsCount());
+				//device=CircleElement.createDefault(lastPosition,model.getCounter());
+				//dodavanje kruga u stablo
+				////////izbaci view?
+				if (obj  instanceof GraphicSlotView) {
+					GraphicSlotView view = ((GraphicSlotView) obj);
+					GraphicSlot gs = view.getGraphicSlot();
+					//System.out.println(gs.getGraphicSlotView().getName());
+					System.out.println(gs.getName());
+
+					//view.repaint();
+					CircleElement ce = (CircleElement)element;
+					gs.addElements(ce, ce.getName());
+					System.out.println("*****TREEEE");
+					SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+					WorkspaceTree tree = MyFrame.getInstance().getWorkspaceTree();
+					tree.getSelectionModel().setSelectionPath(new TreePath(new Object[] 
+					{tree.getRoot(), gs.getPage().getDocument().getProject(), gs.getPage().getDocument(), gs.getPage(), gs,ce}));
+					
+				}
+				
+				
+			}else if (elementType==GraphicSlotView.RECTANGLE){
+				element=RectangleElement.createDefault(lastPosition,model.getElementsCount());
+				//device=RectangleElement.createDefault(lastPosition,model.getCounter());
+				//System.out.println("Dodaj u stablo pravougaonik!");
+				//dodavanje pravougaonika u stablo
+				if (obj  instanceof GraphicSlotView) {
+
+					GraphicSlotView view = ((GraphicSlotView) obj);
+					GraphicSlot gs = view.getGraphicSlot();
+					RectangleElement re = (RectangleElement)element;
+					//view.repaint();
+					gs.addElements(re, re.getName());
+					SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+					WorkspaceTree tree = MyFrame.getInstance().getWorkspaceTree();
+					tree.getSelectionModel().setSelectionPath(new TreePath(new Object[] 
+					{tree.getRoot(), gs.getPage().getDocument().getProject(), gs.getPage().getDocument(), gs.getPage(), gs,re}));
+
+					}
+				}
+
+	//	selectionModel.removeAllFromSelectionList();
+		
+		model.addSlotElement(element);	
+		
+		selectionModel.addToSelectionList(element);
+	
+	}
+
+	@Override
+	public void undoCommand() {
+		System.out.println("*****UNDO");
+		if(element!=null){
+			//selectionModel.removeAllFromSelectionList();
+			model.removeElement(element);
+			Object p = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+			//brisanje kruga u stablo
+			if (obj  instanceof GraphicSlotView) {
+				GraphicSlotView view = ((GraphicSlotView) obj);
+				GraphicSlot gs = view.getGraphicSlot();
+				//view.repaint();
+				
+				if(element instanceof CircleElement){
+					CircleElement ce = (CircleElement)element;
+					gs.removeElement(element);
+					SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+	
+				}else if(element instanceof RectangleElement){
+					RectangleElement re = (RectangleElement)element;
+					gs.removeElement(element);
+					SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+				}
+				selectionModel.removeFromSelectionList(element);
+			}
+		}
+	}
+}

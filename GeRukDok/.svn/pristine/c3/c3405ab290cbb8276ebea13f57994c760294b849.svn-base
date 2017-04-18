@@ -1,0 +1,62 @@
+package actions;
+
+import gui.MyFrame;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.tree.TreePath;
+
+import model.workspace.Document;
+import model.workspace.GraphicSlot;
+import model.workspace.Page;
+import view.DocView;
+import view.GraphicSlotView;
+import view.PageView;
+import view.ProjectView;
+
+public class UndoAction extends AbstractAction {
+	
+	public UndoAction(){}
+	
+	public void actionPerformed(ActionEvent e) {
+		Object o = MyFrame.getInstance().getWorkspaceTree().getLastSelectedPathComponent();
+		TreePath path = MyFrame.getInstance().getWorkspaceTree().getSelectionPath();
+		Object parent = path.getPathComponent(path.getPathCount()-2);
+		 if (o instanceof GraphicSlot){
+				Object grandpa = path.getPathComponent(path.getPathCount()-3);
+				Document d = (Document)grandpa;
+				GraphicSlot s = (GraphicSlot)o;
+				Page pg = (Page)parent;
+				JInternalFrame frame = MyFrame.getInstance().getDesktop().getSelectedFrame();
+				ProjectView view = (ProjectView)frame;
+				
+				for(DocView dv : view.getDocuments())
+				{
+					if(dv.getName() == d.getName())
+					{
+						for (PageView pv : dv.getPages()) 
+						{
+							if (pv.getName() == pg.getName()) 
+							{
+								for(Object slot : pv.getSlots())
+								{
+									if(slot instanceof GraphicSlotView)
+									{
+										GraphicSlotView slotView = (GraphicSlotView)slot;
+										if (s.name == slotView.getName())
+										{
+											slotView.getCommandManager().undoCommand();
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+		 }
+	}
+}

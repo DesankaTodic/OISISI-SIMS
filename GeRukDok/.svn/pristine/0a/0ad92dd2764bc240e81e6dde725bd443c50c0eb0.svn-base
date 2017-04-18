@@ -1,0 +1,28 @@
+package actions;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
+
+
+public class AboutGeRuDoc extends AbstractAction {
+
+	public AboutGeRuDoc()
+	  {
+		    putValue("Name", "About GeRuDoc");
+		    putValue("ShortDescription", "Informations about members of team 4-2");
+		    putValue("AcceleratorKey", 
+		      KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+		  }
+
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+	
+	
+	}	
+	
+	
+}

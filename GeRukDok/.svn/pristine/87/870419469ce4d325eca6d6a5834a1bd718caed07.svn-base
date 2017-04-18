@@ -1,0 +1,153 @@
+package model.workspace;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Observable;
+
+import javax.swing.tree.TreeNode;
+
+import event.ModelUpdateEvent;
+import model.SlotModel;
+import model.SlotSelectionModel;
+
+public class GraphicSlot extends Observable implements TreeNode,Serializable{
+	private ArrayList<Rectangle> rectangles=new ArrayList<Rectangle>();
+	private ArrayList<Circle> circles=new ArrayList<Circle>();
+	
+	private ArrayList elements=new ArrayList();
+	public String name;
+	//private String textOrGraphic;
+	private Page page;
+	private int rectangleCounter = 0;
+	private int circleCounter = 0;
+	private int elementCounter = 0;
+	
+	private SlotModel model=new SlotModel();
+	//referenca na stateManager
+	private SlotSelectionModel selectionModel;
+	
+	//private GraphicSlotView gsv;
+	
+	public GraphicSlot(String slotName,Page page) {
+		name=slotName;
+		this.page = page;
+	}
+	
+	public Page getPage()
+	{
+		return page;
+	}
+	
+	/*public String getToG(){
+		return textOrGraphic;
+	}*/
+	
+	public SlotModel getModel() {
+		return model;
+	}
+	
+	public String toString(){
+		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setModel(SlotModel model) {
+		this.model = model;
+	}
+	public void addRectangles(Rectangle rect,String name){
+		//rectangles.add(rect);
+		elements.add(rect);
+		rect.setName(name);
+		///////////////////observer metode
+		ModelUpdateEvent event = new ModelUpdateEvent((Object)page,true,false);
+		setChanged();
+		notifyObservers(event);
+		///////////////////////////////////
+	}
+	public void addCircles(Circle circle, String name){
+		//rectangles.add(rect);
+		elements.add(circle);
+		circle.setName(name);
+		///////////////////observer metode
+		ModelUpdateEvent event = new ModelUpdateEvent((Object)page,true,false);
+		setChanged();
+		notifyObservers(event);
+		///////////////////////////////////
+	}
+	public void removeRectangle(Rectangle rect){
+		//rectangles.remove(rect);
+		elements.remove(rect);
+		///////////////////observer metode
+		ModelUpdateEvent event = new ModelUpdateEvent((Object)page,false,true);
+		setChanged();
+		notifyObservers(event);
+		///////////////////////////////////
+	}
+	public void removeCircle(Circle circle){
+		//rectangles.remove(rect);
+		elements.remove(circle);
+		///////////////////observer metode
+		ModelUpdateEvent event = new ModelUpdateEvent((Object)page,false,true);
+		setChanged();
+		notifyObservers(event);
+		///////////////////////////////////
+	}
+	public Object getElement(int index){
+		return elements.get(index);
+	}
+	public int getElementIndex(Object element){
+		return elements.indexOf(element);
+	}
+	public int getElementCount(){
+		return elements.size();
+	}
+	public boolean isLeaf() {
+		return false;
+	}	
+	
+	public void setName(String name){
+		this.name=name;
+	}
+
+
+	public TreeNode getChildAt(int arg0) {
+		return null;
+	}
+
+
+	public int getChildCount() {
+		return elements.size();
+	}
+
+
+	public TreeNode getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public boolean getAllowsChildren() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public Enumeration children() {
+		// TODO Auto-generated method stub
+		return (Enumeration) elements;
+	}
+
+	@Override
+	public int getIndex(TreeNode node) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public SlotSelectionModel getSelectionModel() {
+		if(selectionModel == null)
+			selectionModel = new SlotSelectionModel();
+		return selectionModel;
+	}
+	
+}

@@ -1,0 +1,84 @@
+package commands;
+
+import gui.MyFrame;
+
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.SwingUtilities;
+
+import model.SlotModel;
+import model.SlotSelectionModel;
+import model.elements.CircleElement;
+import model.elements.RectangleElement;
+import model.elements.SlotElement;
+import model.workspace.GraphicSlot;
+import view.GraphicSlotView;
+
+
+
+public class DeleteDeviceCommand extends AbstractCommand{
+	SlotModel model;
+	Point2D lastPosition;
+	SlotElement element = null;
+	SlotSelectionModel selectionModel;
+	int elementType;
+	Object obj;
+	
+	public DeleteDeviceCommand(SlotModel model,SlotSelectionModel selectionModel, Point2D lastPosition,int elementType,Object m) {
+		this.model = model;
+		this.lastPosition = lastPosition;
+		this.selectionModel = selectionModel;
+		this.elementType=elementType;	
+		obj=m;
+		//device = se;
+
+	}
+
+	@Override
+	public void doCommand() {
+		
+		System.out.println("*****DO Deleteee");
+		GraphicSlotView view= (GraphicSlotView)obj;
+		GraphicSlot slot = view.getGraphicSlot();
+		view.startSelectState();
+		if (!view.getGraphicSlot().getSelectionModel().getSelectionList().isEmpty()){
+			Iterator<SlotElement > it=view.getGraphicSlot().getSelectionModel().getSelectionListIterator();
+			while (it.hasNext()){
+				SlotElement element=it.next();
+				view.getGraphicSlot().getModel().removeElement(element);
+				slot.removeElement(element);
+				SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+			}
+			view.getGraphicSlot().getSelectionModel().removeAllFromSelectionList();
+		}
+		
+	}
+
+	@Override
+	public void undoCommand() {
+		
+		if (elementType==GraphicSlotView.CIRCLE){
+			element=CircleElement.createDefault(lastPosition,model.getElementsCount());
+			GraphicSlot gs = ((GraphicSlotView) obj).getGraphicSlot();
+			gs.addElements(element, element.getName());
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+				
+				
+		}else if (elementType==GraphicSlotView.RECTANGLE){
+			element=RectangleElement.createDefault(lastPosition,model.getElementsCount());
+			GraphicSlot gs = ((GraphicSlotView) obj).getGraphicSlot();
+			gs.addElements(element, element.getName());
+			SwingUtilities.updateComponentTreeUI(MyFrame.getInstance().getWorkspaceTree());
+		}
+
+		selectionModel.removeAllFromSelectionList();
+		
+		model.addSlotElement(element);	
+		
+		selectionModel.addToSelectionList(element);
+		}
+	
+}
+
